@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface SessionRepository extends JpaRepository<Session, Long> {
     @Query(value = """
-                SELECT *
+                SELECT id, device_type - 1 AS device_type, ended_at_utc, started_at_utc, user_id
                 FROM Sessions
                 WHERE device_type = :#{#type?.getCode()}
                 ORDER BY started_at_utc
@@ -19,7 +19,7 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
     Session getFirstDesktopSession(@Param("type") DeviceType deviceType);
 
     @Query(value = """
-                SELECT *
+                SELECT id, device_type - 1 AS device_type, ended_at_utc, started_at_utc, user_id
                 FROM Sessions
                 WHERE ended_at_utc < :end AND user_id IN (
                     SELECT id FROM Users WHERE deleted = false
